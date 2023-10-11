@@ -17,3 +17,9 @@ def get_user(username: str, db=fake_users_db):
     if username in db:
         user_dict = db[username]
         return UserInDB(**user_dict)
+
+
+def create_new_user(user: UserInDB):
+    if user.username not in fake_users_db:
+        fake_users_db[user.username] = user.model_dump()
+    print(*fake_users_db.items(), sep='\n')

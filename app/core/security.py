@@ -1,6 +1,9 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    OAuth2PasswordRequestForm  # для импорта из security
+)
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from db import get_user
@@ -17,8 +20,10 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 15
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-# 'token' ~ './token' - путь до конечной точки, в которой реализована аутентфикация
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/token')
+# OAuth2PasswordBearer для авторизации по токену
+# 'token' ~ './token' - путь до конечной точки, в
+#  которой реализована аутентфикация
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='auth/login')
 
 
 # def fake_hash_password(password: str) -> str:
@@ -61,9 +66,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # получение инф. о пользователском имени через полезную нагрузку
         username: str = payload.get('sub')
         if username is None:
             raise credentials_exception
+        # аннотация типов для информации токена
         token_data = TokenData(username=username)
     except JWTError:
         raise credentials_exception
