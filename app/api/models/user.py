@@ -21,3 +21,9 @@ class User(BaseModel):
 # расширяем класс User, добавляя новый атрибут
 class UserInDB(User):
     hashed_password: str
+
+
+class CurrencyExch(BaseModel):
+    value_1: str
+    value_2: str
+    quantity: float = 1

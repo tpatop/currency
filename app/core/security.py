@@ -10,11 +10,15 @@ from db import get_user
 from datetime import datetime
 from datetime import timedelta
 from api.models.user import TokenData, User
+from core.config import load_hash_config
 
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 15
+# загрузка из переменного окружения
+config = load_hash_config()
+
+SECRET_KEY = config.secret_key
+ALGORITHM = config.algoritm
+ACCESS_TOKEN_EXPIRE_MINUTES = config.expire_minutes
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
