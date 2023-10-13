@@ -20,6 +20,8 @@ def requests_currency_list():
     return response
 
 
+# для обработки ошибок несуществующих валют можно
+# получать список по зависимости от функции выше
 def currency_convert(exchange: CurrencyExch):
     url = URL + f'convert?to={exchange.value_1}&from={exchange.value_2}&amount={exchange.quantity}'
     response: Response = get(
