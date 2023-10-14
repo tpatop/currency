@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from typing import Annotated
-from api.models.pydantic_models import CurrencyExch, User
+from api.models.pydantic_models import CurrencyExch
 from core.security import get_current_active_user
 from utils.external_api import requests_currency_list, currency_convert
 
@@ -8,19 +8,14 @@ from utils.external_api import requests_currency_list, currency_convert
 router = APIRouter()
 
 
-@router.get('/exchange/')
-async def exchange_currency(
-    exchange: Annotated[CurrencyExch, Depends()],
-    currect_user: Annotated[User, Depends(get_current_active_user)]
-):
+@router.get('/exchange/', dependencies=[Depends(get_current_active_user)])
+async def exchange_currency(exchange: Annotated[CurrencyExch, Depends()]):
     data = currency_convert(exchange)
     return data
 
 
-@router.get('/list')
-async def get_currency_list(
-    currect_user: Annotated[User, Depends(get_current_active_user)]
-):
+@router.get('/list', dependencies=[Depends(get_current_active_user)])
+async def get_currency_list():
     data = requests_currency_list()
     return data
 
