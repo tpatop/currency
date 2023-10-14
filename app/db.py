@@ -1,4 +1,4 @@
-from api.models.user import UserInDB
+from api.models.pydantic_models import UserInDB
 
 
 #  БД для тестирования правильности работы

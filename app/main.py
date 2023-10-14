@@ -1,13 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
 
-from api.endopoints.users import Router as uRouter
-from api.endopoints.currency import Router as cuRouter
+from api.endpoints.users import router as user_router
+from api.endpoints.currency import router as curr_router
 
 
 app = FastAPI()
-app.include_router(uRouter, prefix='/auth')
-app.include_router(cuRouter, prefix='/currency')
+app.include_router(user_router, prefix='/auth')
+app.include_router(curr_router, prefix='/currency')
 
 
 @app.get('/')

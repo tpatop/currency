@@ -9,7 +9,7 @@ from jose import JWTError, jwt
 from db import get_user
 from datetime import datetime
 from datetime import timedelta
-from api.models.user import TokenData, User
+from api.models.pydantic_models import TokenData, User
 from core.config import load_hash_config
 
 

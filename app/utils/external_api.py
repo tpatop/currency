@@ -1,6 +1,6 @@
 from requests import get, Response
 from core.config import load_api_currency
-from api.models.user import CurrencyExch
+from api.models.pydantic_models import CurrencyExch
 
 
 config = load_api_currency()

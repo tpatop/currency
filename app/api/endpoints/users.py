@@ -8,15 +8,15 @@ from core.security import (
     authenticate_user,
     get_password_hash
 )
-from api.models.user import User, Token, UserInDB
+from api.models.pydantic_models import User, Token, UserInDB
 from datetime import timedelta
 from db import create_new_user
 
-Router = APIRouter()
+router = APIRouter()
 
 
 # при успешной аутентификации генерируется токен доступа
-@Router.post('/login', response_model=Token)
+@router.post('/login', response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
@@ -36,14 +36,14 @@ async def login_for_access_token(
     return {'access_token': access_token, 'token_type': 'bearer'}
 
 
-@Router.get('/me')
+@router.get('/me')
 async def read_users_me(
     current_user: Annotated[User, Depends(get_current_active_user)]
 ):
     return [{'item_id': 'succesfull', 'owner': current_user.username}]
 
 
-@Router.post('/register')
+@router.post('/register')
 async def registration_user(user: Annotated[User, Depends()], password: str):
     password_hash = get_password_hash(password)
     # делаем словарь для добавления хэша пароля
