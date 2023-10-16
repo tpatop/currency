@@ -21,12 +21,12 @@ def requests_currency_list():
 
 
 def checking_values_in_list(exchange: CurrencyExch):
+    # минус способа: дополнительный запрос к внешнему API
     curr_list = requests_currency_list()
     # исключаем ошибку с регистром
     exchange.value_1 = exchange.value_1.upper()
     exchange.value_2 = exchange.value_2.upper()
     # исключаем ошибку с отсутсвием в поддержке внешнего API кода валюты
-    # минус способа: два запроса к внешнему API
     result = all([exchange.value_1 in curr_list,
                   exchange.value_2 in curr_list])
     return result
