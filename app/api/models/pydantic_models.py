@@ -1,5 +1,6 @@
 from typing import Union
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, field_validator
+from fastapi import HTTPException
 
 
 class Token(BaseModel):
@@ -17,20 +18,28 @@ class User(BaseModel):
     full_name: Union[str, None] = None
     disabled: Union[bool, None] = None
 
-    @validator('username')
+    @field_validator('username')
     def username_validate(cls, val: str):
         result = val.isalpha()
-        if result and len(val) > 3:
+        if result and len(val) >= 3:
             return val
         else:
-            raise ValueError('The username must contain only letters and consist of 4 or more characters')
+            raise HTTPException(
+                status_code=400,
+                detail='The username must contain only letters and consist of 3 or more characters'
+            )
 
-    @validator('full_name')
+    @field_validator('full_name')
     def full_name_is_alpha(cls, val: str):
-        if val is not None and val.replace(' ', '').isalpha():
+        if val is None:
+            return None
+        elif val.replace(' ', '').isalpha():
             return val
         else:
-            raise ValueError('The full name must contain only letters')
+            raise HTTPException(
+                status_code=400,
+                detail='The full name must contain only letters'
+            )
 
 
 # расширяем класс User, добавляя новый атрибут
@@ -43,16 +52,22 @@ class CurrencyExch(BaseModel):
     value_2: str
     quantity: float = 1
 
-    @validator('value_1')
+    @field_validator('value_1')
     def value_1_validate(cls, val: str):
         if len(val) == 3:
             return val
         else:
-            raise ValueError('The value must be 3 characters')
+            raise HTTPException(
+                status_code=400,
+                detail='The value must be 3 characters'
+            )
 
-    @validator('value_2')
+    @field_validator('value_2')
     def value_2_validate(cls, val: str):
         if len(val) == 3:
             return val
         else:
-            raise ValueError('The value must be 3 characters')
+            raise HTTPException(
+                status_code=400,
+                detail='The value must be 3 characters'
+            )
