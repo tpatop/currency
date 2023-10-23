@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Body, Depends, HTTPException
 from core.security import (
     get_current_active_user,
     OAuth2PasswordRequestForm,
@@ -44,7 +44,7 @@ async def read_users_me(
 
 
 @router.post('/register')
-async def registration_user(user: Annotated[User, Depends()], password: str):
+async def registration_user(user: User, password: Annotated[str, Body()]):
     password_hash = get_password_hash(password)
     # делаем словарь для добавления хэша пароля
     user = user.model_dump()
